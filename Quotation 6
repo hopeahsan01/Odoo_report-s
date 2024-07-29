@@ -1,0 +1,295 @@
+<?xml version="1.0"?>
+<odoo>
+    <!-- Define the report action -->
+    <record id="hr_employee_print_badge" model="ir.actions.report">
+        <field name="name">Print Patient Info</field>
+        <field name="model">hospital.dir</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">hospital.print_employee_badge</field>
+        <field name="report_file">hospital.print_employee_badge</field>
+        <field name="print_report_name">'Print Badge - %s' % (object.name)</field>
+        <field name="binding_model_id" ref="model_hospital_dir"/>
+        <field name="binding_type">report</field>
+    </record>
+    <!-- Define the report template -->
+    <template id="print_employee_badge">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h4 align="center">QUOTATION</h4>
+                        <table class="table table-condensed table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <strong>TO</strong>
+                                    </th>
+                                    <th>
+                                        <strong>Supplier Details</strong>
+                                    </th>
+                                    <th colspan="2">Quote Information</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td rowspan="7">
+                                        <strong>Customer Name:</strong>
+                                        <br></br>
+                                        <h6>Address:</h6>
+                                        <br></br>
+                                        <br></br>
+                                        <br></br>
+                                        <br></br>
+                                        <br></br>
+                                        <strong>Kind Attn:</strong>
+                                        <br></br>
+                                        <strong>Contact #:</strong>
+                                        <br></br>
+                                        <strong>Email:</strong>
+                                    </td>
+                                    <td rowspan="7">
+                                        <strong>SCRUBZ - F.Z.C.</strong>
+                                        <br></br>
+                                        <span>P.O. Box: 22071</span>
+                                        <br></br>
+                                        <span>Amber Gem Tower,</span>
+                                        <br></br>
+                                        <span>Sheikh Khalifa Street,</span>
+                                        <br></br>
+                                        <span>Opp. Dubai Islamic Bank</span>
+                                        <br></br>
+                                        <span>Ajman,</span>
+                                        <br></br>
+                                        <span>United Arab Emirates</span>
+                                        <br></br>
+                                        <strong>Tel:</strong>
+                                        <span>+971 6 731 9919</span>
+                                    </td>
+                                    <tr><td>Quote NO</td></tr>
+                                    <tr><td>Quote Date</td></tr>
+                                    <tr><td>RFQ / Ref No:</td></tr>
+                                    <tr><td>sales Rep:</td></tr>
+                                    <tr><td>Payment Terms</td></tr>
+                                    <tr><td>SCRUBZ TRN</td></tr>
+                                </tr>
+<!--                                <tr>-->
+                                <!--                                    <td>Customer TRN#:</td>-->
+                                <!--                                </tr>-->
+                            </tbody>
+                        </table>
+                        <table class="table table-condensed table-bordered">
+                            <thead>
+                                <tr style="background-color: #ADD8E6;">
+                                    <th>
+                                        <strong>S. No</strong>
+                                    </th>
+                                    <th>
+                                        <strong>Model</strong>
+                                    </th>
+                                    <th>
+                                        <strong>Color</strong>
+                                    </th>
+                                    <th>
+                                        <strong>Size</strong>
+                                    </th>
+                                    <th>
+                                        <strong>Description</strong>
+                                    </th>
+                                    <th>
+                                        <strong>Qty</strong>
+                                    </th>
+                                    <th>
+                                        <strong>Unit Price (AED)</strong>
+                                    </th>
+                                    <th>Special Unit Price (AED)</th>
+                                    <th>Total Price (AED)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>5</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>6</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>7</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>8</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>9</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>10</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td colspan="4">
+                                        <strong>Sub Total: AED</strong>
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td colspan="6">
+                                        <strong>Special Discount: AED</strong>
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td colspan="6">
+                                        <strong>Sub Total After Discount: AED</strong>
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td colspan="6">
+                                        <strong>VAT @ 5%: AED</strong>
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td colspan="6">
+                                        <strong>Total Amount: AED</strong>
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="row mt-4 mb-2">
+                            <div class="col-auto col-3 mw-100 mb-2">
+                                <strong>_______________________</strong>
+                                <br/>
+                                <br></br>
+                                <span class="m-0 mr-10">
+                                    <strong>Prepared By</strong>
+                                </span>
+                            </div>
+                            <div class="col-auto col-3 mw-100 mb-2">
+                                <strong>____________________________________</strong>
+                                <br/>
+                                <br></br>
+                                <span class="m-0">
+                                    <strong>Checked and Authorized By</strong>
+                                </span>
+                            </div>
+                            <div class="col-auto col-3 mw-100 mb-2">
+                                <strong>____________________________</strong>
+                                <br/>
+                                <br></br>
+                                <span>
+                                    <strong>Acknowledged By</strong>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>
+

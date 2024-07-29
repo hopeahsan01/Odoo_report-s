@@ -1,0 +1,128 @@
+<?xml version="1.0"?>
+<odoo>
+    <!-- Define the report action -->
+    <record id="print_je_report" model="ir.actions.report">
+        <field name="name">Journal Entry</field>
+        <field name="model">account.move</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">hospital.print_journal_entry</field>
+        <field name="report_file">hospital.print_journal_entry</field>
+        <field name="print_report_name">'%s' % (object.name)</field>
+        <field name="binding_model_id" ref="model_account_move"/>
+        <field name="binding_type">report</field>
+    </record>
+
+
+    <!-- Define the report template -->
+    <template id="print_journal_entry">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page">
+
+                        <h2 align="center">Journal Entry</h2>
+                        <br></br>
+                        <br></br>
+                        <table class="table table-condensed">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <strong>Journal Entry :</strong>
+                                    </td>
+                                    <td>
+                                        <span t-field="doc.name"/>
+                                    </td>
+                                    <td>
+                                        <strong>Journal :</strong>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>Date :</strong>
+                                    </td>
+                                    <td>
+                                        <span t-field="doc.invoice_date_due"/>
+                                    </td>
+                                    <td>
+                                        <strong>Reference :</strong>
+                                    </td>
+                                    <td>
+                                        <span t-field="doc.ref"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <t t-set="display_analytic" t-value="any(l.analytic_distribution for l in doc.line_ids)"/>
+                        <table class="table table-condensed">
+                            <thead>
+                                <tr>
+                                    <th class="text-wrap">Partner</th>
+                                    <th class="text-wrap">Account</th>
+                                    <th class="text-wrap" style="width: 40%;">Label</th>
+
+                                    <!--                                    <th class="text-wrap">Analytic Account</th>-->
+                                    <th t-if="analytic_distribution">
+                                        <span>Analytic Account</span>
+                                    </th>
+
+                                    <th class="text-wrap">Debit</th>
+                                    <th class="text-wrap">Credit</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-set="total_debit" t-value="0"/>
+                                <t t-set="total_credit" t-value="0"/>
+                                <t t-foreach="doc.line_ids" t-as="lines">
+                                    <tr>
+                                        <td class="text-nowrap">
+                                            <span t-field="lines.partner_id"/>
+                                        </td>
+                                        <td class="text-nowrap">
+                                            <span t-field="lines.account_id"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="lines.name"/>
+                                        </td>
+                                        <td t-if="analytic_distribution">
+                                            <span t-field="lines.analytic_distribution"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="lines.debit"/>
+                                            <t t-set="total_debit" t-value="total_debit + lines.debit"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="lines.credit"/>
+                                            <t t-set="total_credit" t-value="total_credit + lines.credit"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                                <tr t-if="display_analytic">
+                                    <td colspan="4" style="text-align:right">Total:</td>
+                                    <td>
+                                        <span t-esc="total_debit"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="total_credit"/>
+                                    </td>
+                                </tr>
+                                <tr t-else="">
+                                    <td colspan="3" style="text-align:right">Total:</td>
+                                    <td>
+                                        <span t-esc="total_debit"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="total_credit"/>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>
+
+

@@ -1,0 +1,156 @@
+<?xml version="1.0"?>
+<odoo>
+    <!-- Define the report action -->
+    <record id="hr_employee_print_badge" model="ir.actions.report">
+        <field name="name">Print Patient Info</field>
+        <field name="model">sale.order</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">hospital.print_employee_badge</field>
+        <field name="report_file">hospital.print_employee_badge</field>
+        <field name="print_report_name">'Print Badge - %s' % (object.name)</field>
+        <field name="binding_model_id" ref="model_sale_order"/>
+        <field name="binding_type">report</field>
+    </record>
+    <!-- Define the report template -->
+    <template id="print_employee_badge">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h4 align="center">QUOTATION</h4>
+                        <table class="table table-sm table-bordered mt-4" style="border:1px solid grey;">
+                    <tr>
+                        <td><strong>To</strong></td>
+                        <td><strong>Supplier Details</strong></td>
+                        <td colspan="2"><strong>Quote Information</strong></td>
+                    </tr>
+                    <tr>
+                        <td rowspan="6">
+                            <strong><span t-field="doc.partner_id.name"/></strong><br/>
+                            <span t-field="doc.partner_id"
+                                  t-options='{"widget": "contact", "fields": ["address"], "no_marker": True}' />
+
+                            <strong>Kind Attn:</strong> <span t-field="doc.contact_id.name"/><br/>
+                            <strong>Contact #:</strong> <span t-field="doc.contact_id.mobile"/><br/>
+                            <strong>Email:</strong> <span t-field="doc.contact_id.email"/><br/>
+                            <strong>Customer TRN#</strong> <span t-field="doc.contact_id.vat"/><br/>
+                        </td>
+                        <td rowspan="6">
+                            <div t-field="doc.env.company.partner_id" t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}' />
+                            Tel: <span t-field="doc.company_id.partner_id.phone"/>
+                        </td>
+                        <td style="font-weight:bold;">Quote No</td>
+                        <td></td>
+                        </tr>
+                    <tr>
+                        <td style="font-weight:bold;		">Quote Date</td>
+                        <td><span t-field="doc.validity_date"/></td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold;">RFQ/Ref No/LPO No</td>
+                        <td></td>
+                    </tr>
+                    <tr style="font-weight:bold;">
+                        <td>Sales Rep</td>
+                        <td></td>
+                    </tr>
+                    <tr style="font-weight:bold;">
+                        <td>Payment Terms</td>
+                        <td><span t-field="doc.payment_term_id.name"/></td>
+                    </tr>
+                    <tr style="font-weight:bold;">
+                        <td>SCRUBZ TRN</td>
+                        <td><span t-field="doc.company_id.vat"/></td>
+                    </tr>
+                </table>
+
+                        <table class="table table-condensed table-bordered">
+                            <thead>
+                                <tr style="background-color: #ADD8E6;">
+                                    <th><strong>S. No</strong></th>
+                                    <th><strong>Model</strong></th>
+                                    <th><strong>Color</strong></th>
+                                    <th><strong>Size</strong></th>
+                                    <th><strong>Description</strong></th>
+                                    <th><strong>Qty</strong></th>
+                                    <th><strong>Unit Price (AED)</strong></th>
+                                    <th>Special Unit Price (AED)</th>
+                                    <th>Total Price (AED)</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <t t-foreach="doc.order_line" t-as="a">
+                                    <tr>
+                                        <td>1</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><span t-field="a.name"/></td>
+                                        <td><span t-field="a.product_uom_qty"/></td>
+                                        <td><span t-field="a.price_unit"/></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                </t>
+                                <tr>
+                                    <td></td>
+                                    <td colspan="6"><strong>Sub Total: AED</strong></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td colspan="6"><strong>Special Discount: AED</strong></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td colspan="6"><strong>Sub Total After Discount: AED</strong></td>
+                                    <td></td>
+                                    <td><span t-field="doc.amount_untaxed"/></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td colspan="6"><strong>VAT @ 5%: AED</strong></td>
+                                    <td></td>
+                                    <td><span t-esc="doc.amount_total-doc.amount_untaxed" t-options='{"widget":
+                                            "float", "decimal_precision": "5"}'	/></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td colspan="6"><strong>Total Amount: AED</strong></td>
+                                    <td></td>
+                                    <td><span t-field="doc.amount_total"/></td>
+                                </tr>
+                            </tbody>
+
+                        </table>
+                        <div class="row mt-4 mb-2">
+                            <div class="col-auto col-3 mw-100 mb-2">
+                                <strong>_______________________</strong>
+                                <br/><br></br>
+                                <span class="m-0 mr-10" align="center"><strong>Prepared By</strong></span>
+                            </div>
+                            <div class="col-auto col-3 mw-100 mb-2">
+                                <strong>____________________________________</strong>
+                                <br/><br></br>
+                                <span class="m-0" align="center"><strong>Checked and Authorized By</strong></span>
+                            </div>
+                            <div class="col-auto col-3 mw-100 mb-2">
+                                <strong>____________________________</strong>
+                                <br/><br></br>
+                                <span align="center"><strong>Acknowledged By</strong></span>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>
+
+            model="product.template"
+stock.picking
+"product_variant_ids" 

@@ -1,0 +1,181 @@
+<?xml version="1.0"?>
+<odoo>
+    <!-- Define the report action -->
+    <record id="print_reception_report" model="ir.actions.report">
+        <field name="name">Reception</field>
+        <field name="model">res.reception</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">reception.print_paf</field>
+        <field name="report_file">reception.print_paf</field>
+        <field name="print_report_name">'%s' % (object.name)</field>
+        <field name="binding_model_id" ref="model_res_reception"/>
+        <field name="binding_type">report</field>
+    </record>
+
+
+    <!-- Define the report template -->d
+    <template id="print_paf">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="row">
+                            <div class="col-8" style="border-right: 1px dotted lightgrey;">
+                                <h6 align="center">
+                                    <strong>BOLETA PESAJE : 2300001</strong>
+                                </h6>
+                                <br></br>
+                                <br></br>
+                                <table class="table table-condensed table-borderless">
+                                    <tbody>
+                                        <tr class="text-wrap">
+                                            <td style="font-weight:bold;">FECHA</td>
+                                            <td>
+                                                <span t-field="o.date"/>
+                                            </td>
+                                            <td style="font-weight:bold;">PESO BRUTO</td>
+                                            <td>
+                                                <span t-field="o.gross_weight"/>
+                                            </td>
+                                        </tr>
+                                        <tr class="text-wrap">
+                                            <td style="font-weight:bold;">PLACA</td>
+                                            <td>
+                                                <span t-field="o.plate"/>
+                                            </td>
+                                            <td style="font-weight:bold;">TARA</td>
+                                            <td>0.0</td>
+                                        </tr>
+                                        <tr class="text-wrap">
+                                            <td style="font-weight:bold;">PRODUCTO</td>
+                                            <td>0.0</td>
+                                            <td style="font-weight:bold;">PESO NETO</td>
+                                            <td>
+                                                <span t-field="o.net_weight"/>
+                                            </td>
+                                        </tr>
+                                        <tr rowspan="1" class="text-wrap">
+                                            <td style="font-weight:bold;">CLIENTE</td>
+                                            <td>COOP.COMPOTOSI RENE CARRASCO CERRO RICO</td>
+                                        </tr>
+                                        <tr class="text-wrap">
+                                            <td style="font-weight:bold;">MINA</td>
+                                            <td>
+                                                <span t-field="o.mine"/>
+                                            </td>
+                                            <td rowspan="2">
+                                                <img t-att-src="/report/barcode/QR/hello" width="100" height="100"
+                                                     alt="barcode"/>
+                                            </td>
+                                        </tr>
+                                        <tr class="text-wrap">
+                                            <td style="font-weight:bold;">ORIGEN</td>
+                                            <td>
+                                                <span t-field="o.origin"/>
+                                            </td>
+                                        </tr>
+                                        <tr class="text-wrap">
+                                            <td style="font-weight:bold;">PLATAFORMA</td>
+                                            <td>
+                                                <span t-field="o.platform"/>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <br></br>
+                                <br></br>
+                                <br></br>
+                                <br></br>
+                                <br></br>
+                                <div class="row mt-4 mb-2">
+                                    <div class="col-auto col-3 mw-100 mb-2 ">
+                                        <strong>____________________________</strong>
+                                        <br/>
+                                        <br></br>
+                                        <span class="m-0">
+                                            <p style="text-align=center">
+                                                <strong>Oerador Mitchell Admin</strong>
+                                            </p>
+                                        </span>
+                                    </div>
+                                    <div class="col-auto col-3 mw-100 mb-2">
+                                        <strong>____________________________________________</strong>
+                                        <br/>
+                                        <br></br>
+                                        <span class="m-0">
+                                            <p style="text-align=center">
+                                                <strong>Conductor: COOP.COMPOTOSI RENE CARRASCO CERRO RICO ALI HASSSSAN
+                                                </strong>
+                                            </p>
+                                        </span>
+                                    </div>
+                                </div>
+                                <h6 align="center">
+                                    <strong>COPIA PARA EL CLIENTE</strong>
+                                </h6>
+                            </div>
+                            <div class="col-4">
+                                <h6 align="center">
+                                    <strong>COMPROBANTE : 2300001</strong>
+                                </h6>
+                                <br></br>
+                                <br></br>
+                                <table class="table table-condensed table-borderless">
+                                    <tbody>
+                                        <tr class="text-wrap">
+                                            <td style="font-weight:bold;">FECHA</td>
+                                            <td>
+                                                <span t-field="o.date"/>
+                                            </td>
+                                        </tr>
+                                        <tr class="text-wrap">
+                                            <td style="font-weight:bold;">PESO NETO</td>
+                                            <td>
+                                                <span t-field="o.net_weight"/>
+                                            </td>
+                                        </tr>
+                                        <tr class="text-wrap">
+                                            <td style="font-weight:bold;">CLIENTE</td>
+                                            <td>COOP.COMPOTOSI RENE CARRASCO CERRO RICO</td>
+                                        </tr>
+                                        <tr class="text-wrap">
+                                            <td style="font-weight:bold;">ORIGEN</td>
+                                            <td>
+                                                <span t-field="o.origin"/>
+                                            </td>
+                                        </tr>
+                                        <tr class="text-wrap">
+                                            <td style="font-weight:bold;">PLATAFORMA</td>
+                                            <td>
+                                                <span t-field="o.platform"/>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <br></br>
+                                <br></br>
+                                <br></br>
+                                <h5 align="center">IMPORTANTE</h5>
+                                <p style="text-align:center;">Conserve este comprobante para recoger su muestra o
+                                    realizer cualquier transaction
+                                </p>
+                                <div align="center">
+                                    <img src="/report/barcode/QR/hello" width="100" height="100"
+                                         alt="barcode"/>
+                                </div>
+                                <br></br>
+                                <br></br>
+                                <br></br>
+                                <h6 align="center">
+                                    <strong>COPIA PARA EL CLIENTE</strong>
+                                </h6>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>
+
+

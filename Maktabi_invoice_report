@@ -1,0 +1,331 @@
+<?xml version="1.0"?>
+<odoo>
+    <!-- Define the report action -->
+    <record id="print_tax_report" model="ir.actions.report">
+        <field name="name">Tax Invoice</field>
+        <field name="model">stock.picking</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">hospital.print_tax</field>
+        <field name="report_file">hospital.print_tax</field>
+        <field name="print_report_name">'%s' % (object.name)</field>
+        <field name="binding_model_id" ref="model_account_move"/>
+        <field name="binding_type">report</field>
+    </record>
+    <template id="header_footer">
+        <div class="header">
+            <t t-set="company" t-value="env.company"/>
+            <div class="text-center" style="border-bottom: 1px solid black">
+                <div class="row">
+                    <img alt="Image" t-if="company.logo" t-att-src="image_data_uri(company.logo)"
+                         style="max-height:100px; max-width:100%"/>
+                </div>
+            </div>
+        </div>
+        <div class="article o_report_layout_standard">
+            <t t-out="0"/>
+        </div>
+        <div class="footer">
+            <div class="text-center" style="border-top: 1px solid black">
+                <span t-field="company.report_footer"/>
+            </div>
+        </div>
+    </template>
+    <!-- Define the report template -->
+    <template id="print_tax">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="hospital.header_footer">
+                    <div style="border-bottom: 2px solid blue;"></div>
+                    <br></br>
+                    <br></br>
+                    <br></br>
+                    <div class="page">
+                        <div class="row" style="border-bottom: 2px solid blue;">
+                            <div class="col-7" style="border-right: 2px solid blue;">
+                                <table class="table table-condensed table-borderless">
+                                    <tbody>
+                                        <tr rowspan="1">
+                                            <td class="text-nowrap">
+                                                <strong>Customer Name and Address</strong>
+                                            </td>
+                                            <td>
+                                                <span t-esc="doc.partner_id.name"/>
+                                                <br/>
+                                                VAT:
+                                                <span t-field="doc.partner_id.vat"/>
+
+                                            </td>
+                                            <td align="right" class="text-nowrap">:اسم العميل</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-nowrap">
+                                                <strong>Customer Code:</strong>
+                                            </td>
+                                            <td>field data</td>
+                                            <td align="right">:العميل</td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <strong>Vat No:</strong>
+                                            </td>
+                                            <td>
+                                                <span t-esc="doc.partner_id.vat"/>
+                                            </td>
+                                            <td class="text-nowrap" align="right">:ضريبة القيمة</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-nowrap">
+                                                <strong>PO/Contract No:</strong>
+                                            </td>
+                                            <td></td>
+                                            <td align="right">:الشراء/رقم</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-nowrap">
+                                                <strong>CR/Momra No/ID:</strong>
+                                            </td>
+                                            <td></td>
+                                            <td align="right" class="text-nowrap">:السجل الهوية</td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <strong>Type of Supply:</strong>
+                                            </td>
+                                            <td></td>
+                                            <td align="right">:التوريد</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-5">
+                                <table class="table table-condensed table-borderless">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <strong>Invoice No:</strong>
+                                            </td>
+                                            <td>
+                                                <span t-field="doc.name"/>
+                                            </td>
+                                            <td align="right">:الفاتورة</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-nowrap">
+                                                <strong>Invoice Date and Time:</strong>
+                                            </td>
+                                            <td>
+                                                <span t-field="doc.invoice_date"/>
+                                            </td>
+                                            <td align="right" class="text-nowrap">:تاريخ ووقت</td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <strong>Supply Date:</strong>
+                                            </td>
+                                            <td>
+                                                <span t-field="doc.delivery_date"/>
+                                            </td>
+                                            <td align="right" class="text-nowrap">:تاريخ العرض</td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <strong>Reference No:</strong>
+                                            </td>
+                                            <td></td>
+                                            <td align="right" class="text-nowrap">:رقم المرجع</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Vat No:</td>
+                                            <td>
+                                                <span t-field="doc.partner_id.name"/>
+                                            </td>
+                                            <td align="right" class="text-nowrap">:ضريبة المضاف</td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <strong>CR No:</strong>
+                                            </td>
+                                            <td>1010797329</td>
+                                            <td align="right">:السجل</td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <strong>Contact:</strong>
+                                            </td>
+                                            <td>field data</td>
+                                            <td align="right">:اتصال</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <br></br>
+                        <br></br>
+                        <table class="table table-condensed table-borderless">
+                            <thead style="border-bottom: 2px solid blue;">
+                                <tr>
+                                    <th class="text-nowrap">
+                                        <strong>الإجمالي مع ضريبة<br></br>Total With VAT
+                                        </strong>
+                                    </th>
+                                    <th align="center">
+                                        <strong>الضريبة VAT Amount</strong>
+                                    </th>
+                                    <th>
+                                        <strong>المضافة VAT</strong>
+                                    </th>
+                                    <th>
+                                        <strong>مجموعه Line Total</strong>
+                                    </th>
+                                    <th>
+                                        <strong>تخفيض Discount</strong>
+                                    </th>
+                                    <th>
+                                        <strong>سعر Price</strong>
+                                    </th>
+                                    <th>
+                                        <strong>الكمية QTY</strong>
+                                    </th>
+                                    <th width="400">
+                                        <strong>وصف
+                                            <br></br>
+                                            Description
+                                        </strong>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody style="border-bottom: 2px solid blue;">
+                                <t t-foreach="doc.invoice_line_ids" t-as="lines">
+                                    <tr>
+                                        <td>32,693.95</td>
+                                        <td>4,264.43</td>
+                                        <td>VAT 15%</td>
+                                        <td>
+                                            <span t-field="lines.price_subtotal"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="lines.discount"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="lines.price_unit"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="lines.quantity"/>
+                                        </td>
+                                        <td width="400">
+                                            <span t-field="lines.name"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                        <br></br>
+                        <div class="row" style="border-bottom: 2px solid blue;">
+                            <div class="col-6">
+                                <table class="table table-condensed table-borderless">
+                                    <tbody>
+                                        <tr style="border-bottom: 2px solid blue;">
+                                            <td>28,429.52 SR</td>
+                                            <td>Gross Value</td>
+                                            <td>الإجمالية</td>
+                                        </tr>
+                                        <tr style="border-bottom: 2px solid blue;">
+                                            <td></td>
+                                            <td>Discount Amount</td>
+                                            <td>مقدار الخصم</td>
+                                        </tr>
+                                        <tr style="border-bottom: 2px solid blue;">
+                                            <td>28,429.52 SR</td>
+                                            <td>Amount After Discount</td>
+                                            <td>المبلغ الخصم</td>
+                                        </tr>
+                                        <tr style="border-bottom: 2px solid blue;">
+                                            <td>4,264.43</td>
+                                            <td>Total VAT</td>
+                                            <td>إجمالي ضريبة</td>
+                                        </tr>
+                                        <tr style="border-bottom: 2px solid blue;">
+                                            <td>
+                                                <strong>32,693.95 SR</strong>
+                                            </td>
+                                            <td>
+                                                <strong>Total After VAT</strong>
+                                            </td>
+                                            <td>الإجمالي بعد</td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <strong>32,693.95 SR</strong>
+                                            </td>
+                                            <td>
+                                                <strong>Net Invoice Amount</strong>
+                                            </td>
+                                            <td>صافي مبلغ</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-6">
+                                <table class="table table-condensed table-borderless">
+                                    <tbody>
+
+                                        <tr>
+                                            <td>
+                                                <strong>Payment Terms:</strong>
+                                            </td>
+                                            <td>Immediate Payment</td>
+                                            <td>شروط الدفع</td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <strong>Payment Method:</strong>
+                                            </td>
+                                            <td></td>
+                                            <td>طريقة الدفع</td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6" align="left">
+                                <span t-field="doc.narration"/>
+                            </div>
+                            <div class="col-6" align="right">
+                                <span t-field="doc.bank_account"/>
+                                <!--                                <p>يجب سداد جميع المدفوعات إلى:
+                                رقم الحساب: 225137484450008
+                                رقم الحساب المصرفي الدولي: SA201500445137484450008
+                                بنك البلاد
+                                رمز سويفت: ALBISARIXXX</p>-->
+                            </div>
+                        </div>
+                        <img t-att-src="'/report/barcode/?
+                        barcode_type=%s&amp;value=%s&amp;width=%s&amp;height=%s'%('QR', 'doc.contact_info', 200, 200)"/>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>
+

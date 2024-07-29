@@ -1,0 +1,209 @@
+<odoo>
+    <!-- Define the report action -->
+    <record id="action_report_quotation_scrubz" model="ir.actions.report">
+        <field name="name">Quotation Scrubz</field>
+        <field name="model">sale.order</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">scrubz_report.report_quotation_scrubz</field>
+        <field name="report_file">scrubz_report.report_quotation_scrubz</field>
+        <field name="print_report_name">'%s' % (object.name)</field>
+        <field name="binding_model_id" ref="sale.model_sale_order"/>
+        <field name="binding_type">report</field>
+    </record>
+    <template id="header_footer">
+        <div class="header">
+            <t t-set="company" t-value="env.company"/>
+            <div class="text-center" style="border-bottom: 1px solid black;">
+                <div class="row">
+                    <div class="col-4 mb4" align="left">
+                        <img alt="Company Logo" t-if="company.logo" t-att-src="image_data_uri(company.logo)"
+                             style="max-height:100px;"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="article o_report_layout_standard">
+            <t t-out="0"/>
+        </div>
+    </template>
+
+    <!-- Define the report template -->
+    <template id="report_quotation_scrubz">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="scrubz_report.header_footer">
+                    <div class="page">
+                        <!-- Header -->
+                        <div class="report-info" style="float: right; width: 50%; text-align: right;">
+                            <p>Date:
+                                <span t-field="doc.date_order"/>
+                            </p>
+                        </div>
+
+
+                        <!-- Customer Info -->
+                        <div class="customer-info" style="width: 100%; margin-bottom: 20px;">
+                            <strong>
+                                <p>No.#
+                                    <span t-field="doc.name"/>
+                                </p>
+                            </strong>
+                            <div style="margin-left: 15px;">
+                                <strong>To:
+                                    <span t-field="doc.partner_id.name"/>
+                                </strong>
+                            </div>
+                            <div style="margin-left: 25px;">
+                                <span t-field="doc.partner_id.street"/>
+                                <br/>
+                                <span t-field="doc.partner_id.street2"/>
+                                <br/>
+                                <span t-field="doc.partner_id.city"/>
+                                <br/>
+                                <span t-field="doc.partner_id.state_id"/>
+                                <br/>
+                                <span t-field="doc.partner_id.zip"/>
+                            </div>
+                            <br/>
+                            <div style="margin-left: 15px;">
+                                <strong>Kind Attn:</strong>
+                            </div>
+                            <div style="margin-left: 25px;">Tel:
+                                <span t-field="doc.partner_id.phone"/>
+                            </div>
+                            <br/>
+                            <div style="margin-left: 15px;">
+                                <p>Sub:
+                                    <span t-field="doc.subject"/>
+                                </p>
+                            </div>
+                            <p>We are pleasesd to submit here with our quotation as per your requirements.</p>
+                        </div>
+                        <!-- Quotation Table -->
+                        <table class="table table-condensed table-bordered" style="border:1px solid black;">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <strong>Nos.</strong>
+                                    </th>
+                                    <th>
+                                        <strong>Code/Model</strong>
+                                    </th>
+                                    <th>
+                                        <strong>Color</strong>
+                                    </th>
+                                    <th>
+                                        <strong>Size</strong>
+                                    </th>
+                                    <th>
+                                        <strong>Description</strong>
+                                    </th>
+                                    <th>
+                                        <strong>Qty</strong>
+                                    </th>
+                                    <th>
+                                        <strong>Special Price</strong>
+                                    </th>
+                                    <th>
+                                        <strong>Total Price</strong>
+                                    </th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <t t-foreach="doc.order_line" t-as="lines">
+                                    <tr>
+                                        <td align="center">
+                                            <span t-esc="lines_index + 1"/>
+                                        </td>
+                                        <td align="center">
+                                            <t t-set="color"
+                                               t-value="lines.product_id.product_template_attribute_value_ids.filtered(lambda attr: attr.attribute_id.name == 'Color')"/>
+                                            <span t-esc="color.name or ''"/>
+                                        </td>
+                                        <td align="center">
+                                            <t t-set="size"
+                                               t-value="lines.product_id.product_template_attribute_value_ids.filtered(lambda attr: attr.attribute_id.name == 'Size')"/>
+                                            <span t-esc="size.name or ''"/>
+                                        </td>
+                                        <td align="center">
+                                            <t t-set="model"
+                                               t-value="lines.product_id.product_template_attribute_value_ids.filtered(lambda attr: attr.attribute_id.name == 'Model')"/>
+                                            <span t-esc="model.name or ''"/>
+                                        </td>
+                                        <td align="center">
+                                            <span t-field="lines.name"/>
+                                        </td>
+                                        <td align="center">
+                                            <span t-field="lines.product_uom_qty"/>
+                                        </td>
+                                        <td align="center">
+                                            <span t-field="lines.price_unit"/>
+                                        </td>
+                                        <td align="center">
+                                            <span t-field="lines.price_total"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="5" align="center">
+                                        <strong>Grand Total</strong>
+                                    </td>
+                                    <td align="center">
+                                        <span t-esc="sum(line.product_uom_qty for line in doc.order_line)"/>
+                                    </td>
+                                    <td align="center">
+                                        <span t-esc="sum(line.price_unit for line in doc.order_line)"/>
+                                    </td>
+                                    <td>
+                                        <!--                                        <span t-field="lines.price_total"/>-->
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="7" align="center">
+                                        <strong>SUB-TOTAL</strong>
+                                    </td>
+                                    <td class="text-nowrap"  align="center" t-esc="str(doc.amount_untaxed) + 'AED '"/>
+                                </tr>
+                                <tr>
+                                    <td colspan="7" align="center">
+                                        <strong>VAT</strong>
+                                    </td>
+                                    <td class="text-nowrap"  align="center" t-esc="str(doc.amount_tax) + 'AED '"/>
+                                </tr>
+                                <tr>
+                                    <td colspan="7" align="center">
+                                        <strong>TOTAL ORDER VALUE:(AED)</strong>
+                                    </td>
+                                    <td class="text-nowrap" align="center" t-esc="str(doc.amount_total) + 'AED '"/>
+                                </tr>
+                            </tfoot>
+                        </table>
+                        <h5>
+                            <u>
+                                <strong>Terms:</strong>
+                            </u>
+                        </h5>
+                        <p>
+                            <span t-field="doc.note"/>
+                        </p>
+                        <div style="width: 100%; margin-top: 20px;">
+                            <p>
+                                Please feel free to contact us for any further information. Your confirmation and LPO is
+                                highly appreciated at earliest.
+                            </p>
+                            <div style="margin-left: 20px;">
+                                <p>
+                                    <strong>Administrator:</strong>
+                                    <span t-field="doc.user_id"/>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

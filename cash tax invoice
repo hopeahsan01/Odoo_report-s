@@ -1,0 +1,192 @@
+<?xml version="1.0"?>
+<odoo>
+    <!-- Define the report action -->
+    <record id="print_grv_report" model="ir.actions.report">
+        <field name="name">Tax Invoice</field>
+        <field name="model">account.move</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">hospital.print_tax_invoice</field>
+        <field name="report_file">hospital.print_tax_invoice</field>
+        <field name="print_report_name">'%s' % (object.name)</field>
+        <field name="binding_model_id" ref="model_account_move"/>
+        <field name="binding_type">report</field>
+    </record>
+
+
+    <!-- Define the report template -->
+    <template id="print_tax_invoice">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h4 align="center" style="font-weight:bold;">CASH TAX INVOICE</h4>
+
+                        <table class="table table-sm table-bordered mt-4"
+                               style="border:2px solid grey; width: 49.5%; float: left; ">
+                            <tbody>
+                                <tr>
+                                    <td>Bill To</td>
+                                    <td>
+                                        <span t-field="doc.partner_id.name"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Contact Person</td>
+                                    <td>
+                                        <span t-field="doc.contact_info"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Mobile No.</td>
+                                    <td>
+                                        <span t-field="doc.partner_id.phone"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>
+
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table class="table table-sm table-bordered mt-4"
+                               style="border:2px solid grey; width: 49.5%; float: right;">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <b>Invoice No.</b>
+                                    </th>
+                                    <th>
+                                        <b>SBZ.</b>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Date</td>
+                                    <td>
+                                        <span t-field="doc.invoice_date"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Sales Person</td>
+                                    <td>
+                                        <span t-field="doc.partner_id.name"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>SCRUBZ TRN</td>
+                                    <td>
+                                        <span t-field="doc.payment_reference"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <table class="table table-sm table-bordered mt-4"
+                               style="border:2px solid grey;">
+                            <thead>
+                                <tr align="center" style="font-weight:bold;">
+                                    <th>SL. No</th>
+                                    <th>Model</th>
+                                    <th>Color</th>
+                                    <th>Size</th>
+                                    <th>Description</th>
+                                    <th>QTY</th>
+                                    <th>Unit Price</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-set="counter" t-value="1"/>
+                                <t t-foreach="doc.invoice_line_ids" t-as="lines">
+                                    <tr align="center">
+                                        <td>
+                                            <t t-esc="counter"/>
+                                        </td>
+                                        <t t-set="counter" t-value="counter + 1"/>
+                                        <td>
+                                            <span t-field="lines.model"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="lines.color"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="lines.size"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="lines.name"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="lines.quantity" t-options='{"widget": "integer"}'/>
+                                        </td>
+                                        <td>
+                                            <span t-field="lines.price_unit"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="lines.price_total"
+                                                  t-options="{'widget': 'monetary', 'display_currency': lines.currency_id}"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                                <tr>
+                                    <td align="left" colspan="6" rowspan="3">
+                                        <h6>Note: No Refund, no exchange.
+                                            <br></br>
+                                            Amount once paid will not be refunded under any circumstances.
+                                            <br></br>
+                                            Goods once sold will not be taken back and exchanged.
+                                            <br></br>
+                                            VAT as per FTa is applicable.
+                                            <br></br>
+                                        </h6>
+                                        <b>Total Amount in
+                                            AED:________________________________________________________________________
+                                        </b>
+                                    </td>
+                                    <td align="center">
+                                        <b class="text-nowrap">Sub Total</b>
+                                    </td>
+                                    <td align="center">
+                                        <span t-field="doc.amount_untaxed"
+                                              t-options="{'widget': 'monetary', 'display_currency': doc.currency_id}"/>
+                                    </td>
+                                </tr>
+                                <tr align="center">
+                                    <td>
+                                        <b>VAT</b>
+                                    </td>
+                                    <td>
+                                        <span t-esc="doc.amount_total-doc.amount_untaxed"
+                                              t-options="{'widget': 'monetary', 'display_currency': doc.currency_id}"/>
+                                    </td>
+                                </tr>
+                                <tr align="center">
+                                    <td>
+                                        <b class="text-nowrap">Total Cash</b>
+                                    </td>
+                                    <td>
+                                        <span t-field="doc.amount_total"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="row mt-4 mb-2">
+                            <div class="col-auto col-3 mw-100 mb-2">
+                                <span class="m-0 mr-10" align="center">
+                                    <strong>Cash Received by(Scrubz Staff):</strong>
+                                </span>
+                            </div>
+                            <div class="col-auto col-3 mw-100 mb-2">
+                                <span class="m-0" align="center">
+                                    <strong>Acknowledge By:</strong>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

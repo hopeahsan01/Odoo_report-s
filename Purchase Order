@@ -1,0 +1,214 @@
+<?xml version="1.0"?>
+<odoo>
+    <!-- Define the report action -->
+    <record id="hr_employee_print_badge" model="ir.actions.report">
+        <field name="name">Purchase Order</field>
+        <field name="model">sale.order</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">hospital.print_employee_badge</field>
+        <field name="report_file">hospital.print_employee_badge</field>
+        <field name="print_report_name">'Print Badge - %s' % (object.name)</field>
+        <field name="binding_model_id" ref="model_sale_order"/>
+        <field name="binding_type">report</field>
+    </record>
+    <!-- Define the report template -->
+    <template id="print_employee_badge">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <t t-if="doc.state == 'draft'">
+                            <h2 align="center">Quotation Order</h2>
+                        </t>
+                        <t t-else="doc.state == 'sale'">
+                            <h2 align="center">Purchase Order</h2>
+                        </t>
+                        <br></br>
+                        <br></br>
+                        <table class="table table-sm o_main_table table-borderless">
+                            <tr>
+                                <td>
+                                    <strong>VENDOR</strong>
+                                </td>
+                                <td>
+                                    <strong>SHIP TO</strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td rowspan="8">
+                                    <span>Redington Saudi Arabia Distribution Company</span>
+                                    <br></br>
+                                    <span>CR #</span>
+                                    <br></br>
+                                    <span>Riyadh</span>
+                                    <br></br>
+                                    <span>Phone:</span>
+                                    <br></br>
+                                    <span>VAT: 301153802100003</span>
+                                    <br></br>
+
+                                </td>
+                                <td>
+                                    <span>Maktabi smart offices company</span>
+                                    <br></br>
+                                    <span>123</span>
+                                    <br></br>
+                                    <span>Riyadh</span>
+                                    <br></br>
+                                    <span>12242 Prince Sultan Bin Abdulaziz Rd, As</span>
+                                    <br></br>
+                                    <span>Sulimaniyah</span>
+                                    <br></br>
+                                    <span>311272437500003</span>
+                                </td>
+                            </tr>
+                        </table>
+                        <table class="table table-sm table-bordered mt-4" style="border:1px solid grey;">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <strong>Quotation Number</strong>
+                                    </th>
+                                    <th>
+                                        <strong>PO No</strong>
+                                    </th>
+                                    <th>
+                                        <strong>Date</strong>
+                                    </th>
+                                    <th colspan="2">
+                                        <strong>Shipping Terms</strong>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td align="center">QT-20240418083801</td>
+                                    <td align="center">P00138</td>
+                                    <td align="center">
+                                        <span t-field="doc.validity_date"/>
+                                    </td>
+                                    <td align="center">4</td>
+                                </tr>
+                            </tbody>
+
+                        </table>
+
+                        <table class="table table-condensed table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <strong>Model #</strong>
+                                    </th>
+                                    <th>
+                                        <strong>Description</strong>
+                                    </th>
+                                    <th>
+                                        <strong>Qty</strong>
+                                    </th>
+                                    <th>
+                                        <strong>Unit Price</strong>
+                                    </th>
+                                    <th>
+                                        <strong>Total</strong>
+                                    </th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <t t-set="subtotal" t-value="0.0"/>
+                                <t t-foreach="doc.order_line" t-as="lines">
+                                    <tr>
+                                        <td>1</td>
+                                        <td>
+                                            <span t-field="lines.name"/>
+                                        </td>
+                                        <td align="center">
+                                            <span t-field="lines.product_uom_qty"/>
+                                        </td>
+                                        <td align="center">
+                                            <span t-field="lines.price_unit"/>
+                                        </td>
+                                        <td align="center">
+                                            <span t-field="lines.price_subtotal"/>
+                                            <t t-set="subtotal"
+                                               t-value="subtotal+(lines.product_uom_qty * lines.price_unit)"/>
+                                        </td>
+                                    </tr>
+
+                                </t>
+                                <tr>
+                                    <td colspan="4" align="right">
+                                        <strong>Sub Total</strong>
+                                    </td>
+                                    <td align="center">
+                                        <span t-field="doc.amount_untaxed"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3">
+                                        <strong>Remarks</strong>
+                                    </td>
+                                    <td align="right">
+                                        <strong>Total Discount</strong>
+                                    </td>
+                                    <td align="center">
+                                        <t t-set="total_discount" t-value="subtotal-doc.amount_untaxed"/>
+                                        <span t-esc="total_discount"
+                                              t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3">Payment Terms: credit 60 days</td>
+                                    <td align="right">
+                                        <strong>TAX</strong>
+                                    </td>
+                                    <td align="center">
+                                        <span t-field="doc.amount_tax"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3"></td>
+                                    <td align="right">
+                                        <strong>Total</strong>
+                                    </td>
+                                    <td align="center">
+                                        <span t-field="doc.amount_total"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p>Confirmation of Purchase Order</p>
+                        <p>The above PO is officially acknowledged with receipt unless the supplier reject within 24 hrs
+                            From issuing and sending
+                            PO Refer to terms and condition of contract.
+                        </p>
+
+                        <div class="row mt-4 mb-2">
+                            <div class="col-auto col-3 mw-100 mb-2">
+                                <strong>_______________________</strong>
+                                <br/>
+                                <span class="m-0 mr-10" align="center">
+                                    <strong>Prepared By:Abubaker</strong>
+                                </span>
+                            </div>
+                            <div class="col-auto col-3 mw-100 mb-2">
+                                <strong>____________________________________</strong>
+                                <br/>
+                                <span class="m-0" align="center">
+                                    <strong>Company Stamp:</strong>
+                                </span>
+                            </div>
+                            <div class="col-auto col-3 mw-100 mb-2">
+                                <strong>____________________________</strong>
+                                <br/>
+                                <span align="center">
+                                    <strong>Approved By:Banan Masri</strong>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,223 @@
+<?xml version="1.0"?>
+<odoo>
+    <!-- Define the report action -->
+    <record id="print_grv_report" model="ir.actions.report">
+        <field name="name">GRV</field>
+        <field name="model">stock.picking</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">hospital.print_grv</field>
+        <field name="report_file">hospital.print_grv</field>
+        <field name="print_report_name">'%s' % (object.name)</field>
+        <field name="binding_model_id" ref="model_stock_picking"/>
+        <field name="binding_type">report</field>
+    </record>
+
+
+    <!-- Define the report template -->
+    <template id="print_grv">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h4 align="center" style="font-weight:bold;">GOODS RECEIPT VOUCHER</h4>
+                        <table class="table table-sm table-bordered mt-4" style="border:1px solid grey;">
+                            <tr>
+                                <td>
+                                    <strong>To</strong>
+                                </td>
+                                <td>
+                                    <strong>Supplier Details</strong>
+                                </td>
+                                <td colspan="2">
+                                    <strong>Quote Information</strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td rowspan="8">
+                                    <br/>
+                                    <strong>Supplier Name:
+                                        <span t-field="doc.partner_id.name"/>
+                                    </strong>
+                                    <br/>
+		                            <strong>Address:
+                                        <span t-field="doc.partner_id"
+                                              t-options='{"widget": "contact", "fields": ["address"], "no_marker": True}'/>
+                                    </strong>
+                                    <strong>Website:</strong>
+                                    <span t-field="doc.contact_infom.website"/>
+                                    <br/>
+
+                                    <strong>Kind Attn:</strong>
+                                    <span t-field="doc.contact_infom.name"/>
+                                    <br/>
+                                    <strong>Contact #:</strong>
+                                    <span t-field="doc.contact_infom.mobile"/>
+                                    <br/>
+                                    <strong>Email:</strong>
+                                    <span t-field="doc.contact_infom.email"/>
+                                    <br/>
+                                    <strong>Supplier TRN#</strong>
+                                    <span t-field="doc.contact_infom.vat"/>
+                                    <br/>
+                                </td>
+                                <td rowspan="8">
+                                    <div t-field="doc.env.company.partner_id"
+                                         t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}'/>
+                                    Tel:
+                                    <span t-field="doc.company_id.partner_id.phone"/>
+                                </td>
+                                <td style="font-weight:bold;">GRV No</td>
+                                <td>
+                                    <span t-field="doc.name"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight:bold;">GRV Date</td>
+                                <td>
+                                    <span t-field="doc.scheduled_date"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight:bold;">Supplier Invoice No.</td>
+                                <td></td>
+                            </tr>
+                            <tr style="font-weight:bold;">
+                                <td>Supplier Invoice Date</td>
+                                <td></td>
+                            </tr>
+                            <tr style="font-weight:bold;">
+                                <td>PO Reference No</td>
+                                <td></td>
+                            </tr>
+                            <tr style="font-weight:bold;">
+                                <td>Job/Sale Order No</td>
+                                <td>
+                                    <span t-field="doc.company_id.vat"/>
+                                </td>
+                            </tr>
+                            <tr style="font-weight:bold;">
+                                <td>Received Date</td>
+                                <td></td>
+
+                            </tr>
+                            <tr style="font-weight:bold;">
+                                <td>SCRUBZ TRN #</td>
+                                <td>
+                                    <span t-field="doc.company_id.vat"/>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <table class="table table-condensed table-bordered" style="border:1px solid black;">
+                            <thead>
+                                <tr style="background-color: #ADD8E6;">
+                                    <th>
+                                        <strong>S. No</strong>
+                                    </th>
+                                    <th>
+                                        <strong>Model</strong>
+                                    </th>
+                                    <th>
+                                        <strong>Color</strong>
+                                    </th>
+                                    <th>
+                                        <strong>Size</strong>
+                                    </th>
+                                    <th>
+                                        <strong>Item Code</strong>
+                                    </th>
+                                    <th>
+                                        <strong>Description</strong>
+                                    </th>
+                                    <th>
+                                        <strong>UoM</strong>
+                                    </th>
+                                    <th>
+                                        <strong>Qty</strong>
+                                    </th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <t t-set="counter" t-value="1"/>
+                                <t t-set="total_received_qty" t-value="0"/>
+                                <t t-foreach="doc.move_ids_without_package" t-as="a">
+                                    <t t-foreach="doc.move_ids" t-as="b">
+                                        <tr align="center">
+                                            <td>
+                                                <t t-esc="counter"/>
+                                            </td>
+                                            <t t-set="counter" t-value="counter + 1"/>
+                                            <td>
+                                                <span t-field="a.model"/>
+                                            </td>
+                                            <td>
+                                                <span t-field="a.color"/>
+                                            </td>
+                                            <td>
+                                                <span t-field="a.size"/>
+                                            </td>
+                                            <td>
+                                                <span t-field="b.product_id.default_code"/>
+                                            </td>
+                                            <td>
+                                                <span t-field="a.description_picking"/>
+                                            </td>
+                                            <td>
+                                                <span t-field="a.product_id.uom_id.name"/>
+                                            </td>
+                                            <td>
+                                                <span t-field="a.quantity"
+                                                      t-options='{"widget": "integer"}'/>
+                                            </td>
+                                        </tr>
+                                        <t t-set="total_received_qty" t-value="total_received_qty + a.quantity" />
+                                    </t>
+                                </t>
+                                <tr>
+                                    <td></td>
+                                    <td align="right" colspan="5">
+                                        <strong>Total Received Qty</strong>
+                                    </td>
+                                    <td></td>
+                                    <td align="center">
+                                        <t t-esc="total_received_qty" t-options='{"widget": "integer"}'/>
+                                    </td>
+
+                                </tr>
+                            </tbody>
+
+                        </table>
+                        <div class="row mt-4 mb-2">
+                            <div class="col-auto col-3 mw-100 mb-2" align="center">
+                                <strong>_______________________</strong>
+                                <br/>
+                                <br></br>
+                                <span class="m-0 mr-10" align="center">
+                                    <strong>Received By</strong>
+                                </span>
+                            </div>
+                            <div align="center" class="col-auto col-3 mw-100 mb-2">
+                                <strong>_______________________</strong>
+                                <br/>
+                                <br></br>
+                                <span class="m-0 mr-10" align="center">
+                                    <strong>Checked By</strong>
+                                </span>
+                            </div>
+                            <div align="center" class="col-auto col-3 mw-100 mb-2">
+                                <strong>_______________________</strong>
+                                <br/>
+                                <br></br>
+                                <span align="center">
+                                    <strong>Authorized By</strong>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>
+

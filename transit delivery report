@@ -1,0 +1,133 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <record id="print_transit_delivery_note" model="ir.actions.report">
+        <field name="name">Transit Delivery Note</field>
+        <field name="model">res.transit.delivery</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">hak_reports.print_delivery_note</field>
+        <field name="report_file">hak_reports.print_delivery_note</field>
+        <field name="print_report_name">'%s' % (object.name)</field>
+        <field name="binding_model_id" ref="model_res_transit_delivery"/>
+        <field name="binding_type">report</field>
+    </record>
+    <template id="header_footer">
+        <div class="header">
+            <t t-set="company" t-value="env.company"/>
+            <div class="text-center" style="border-bottom: 1px solid black">
+                <div class="row">
+                    <img alt="Image" t-if="company.logo" t-att-src="image_data_uri(company.logo)"
+                         style="max-height:100px; max-width:100%"/>
+                </div>
+            </div>
+        </div>
+        <div class="article o_report_layout_standard">
+            <t t-out="0"/>
+        </div>
+        <div class="footer">
+            <div class="text-center" style="border-top: 1px solid black; font-size: 20px;">
+                <span t-field="company.report_footer"/>
+            </div>
+        </div>
+    </template>
+    <!-- Define the report template -->
+    <template id="print_delivery_note">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="hak_reports.header_footer">
+                    <div class="page">
+                        <div style="margin-left: 550px;">No. BLM :....</div>
+                        <br></br><br></br><br></br>
+                        <div class="row">
+                            <div class="col-6">
+                                <br></br><br></br>
+                                <div>Receptionnaire
+<!--                                    <span t-field="doc.receptionnaire"></span>-->
+                                    .....................................................................................
+                                </div><br></br>
+                                <div>Date
+                                    ..........................................................................................................
+                                </div><br></br>
+                                <div>Navire
+                                    .......................................................................................................
+                                </div><br></br>
+                                <div>Camion Numero
+                                    ...................................................................................
+                                </div><br></br>
+                                <div>Etat
+                                    ............................................................................................................
+                                </div><br></br>
+                                <div>Nature de la Marchandise
+                                    ................................................................
+                                </div><br></br>
+                                <div>Nombre
+                                    ....................................................................................................
+                                </div><br></br>
+                                <div>Quantite
+                                    ..................................................................................................
+                                </div><br></br>
+                            </div>
+                            <div class="col-6">
+                                <div>No. Declaration .................... Date
+                                    .....................................................
+                                </div><br></br>
+                                <div>Liquidation: ............................... Date
+                                    ..................................................
+                                </div><br></br>
+                                <div>Heures: ............................................................... h
+                                    ..................................
+                                </div><br></br>
+                                <div>No. Cale:
+                                    ...................................................................................................
+                                </div><br></br>
+                                <div>Nom du Chauffeur:<span></span>
+                                    ..............................................................................
+                                </div><br></br>
+                                <div>No. Telephone:
+                                    ......................................................................................
+                                </div><br></br>
+                                <div>No. Permis de Conduire:
+                                    ....................................................................
+                                </div><br></br>
+                                <div>No. Ticket Pont Bascule:
+                                    ....................................................................
+                                </div><br></br>
+                                <div>Poids:
+                                    ........................................................................................................
+                                </div><br></br>
+                            </div>
+                        </div>
+                        <table class="table table-sm table-bordered mt-n4"
+                               style="border:1px solid grey;">
+                            <thead>
+                                <tr>
+                                    <th align="center">
+                                        <strong>Code du Representant</strong>
+                                    </th>
+                                    <th align="center">
+                                        <strong>Signature du Livreur</strong>
+                                    </th>
+                                    <th align="center">
+                                        <strong>Signature du Chauffeur</strong>
+                                    </th>
+                                    <th align="center">
+                                        <strong>Reception</strong>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td  rowspan="5"></td>
+                                    <td rowspan="5"></td>
+                                    <td rowspan="5"></td>
+                                    <td rowspan="5"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>
+

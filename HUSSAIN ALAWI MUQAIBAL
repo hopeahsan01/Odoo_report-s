@@ -1,0 +1,193 @@
+<?xml version="1.0"?>
+<odoo>
+    <!-- Define the report action -->
+    <record id="print_ds_report" model="ir.actions.report">
+        <field name="name">New Delivery Slip</field>
+        <field name="model">stock.picking</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">hospital.print_ds</field>
+        <field name="report_file">hospital.print_ds</field>
+        <field name="print_report_name">'%s' % (object.name)</field>
+        <field name="binding_model_id" ref="model_stock_picking"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="header_footer">
+        <div class="header">
+            <t t-set="company" t-value="env.company"/>
+            <div class="text-center" style="border-bottom: 1px solid black">
+                <div class="row">
+                    <div class="col-3 mb4" align="left">
+                        <img alt="Image" t-if="company.logo" t-att-src="image_data_uri(company.logo)"
+                             style="max-height:90px"/>
+                    </div>
+                    <div class="col-9" style="vertical-align:middle;">
+                        <!--                        <h2 class="text-center">-->
+                        <!--                            HUSSAIN ALAWI MUQAIBAL-->
+                        <!--                        </h2>-->
+                        <h2>
+                            <span t-field="company.report_header"/>
+                        </h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="article o_report_layout_standard">
+            <t t-out="0"/>
+        </div>
+        <div class="footer">
+            <div class="text-center" style="border-top: 1px solid black">
+                <h6>Page</h6>
+            </div>
+        </div>
+    </template>
+
+    <!-- Define the report template -->
+    <template id="print_ds">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="hospital.header_footer">
+                    <div class="page">
+                        <h4>
+                            <span t-field="doc.name"/>
+                        </h4>
+                        <div>
+                            <strong>From:</strong>
+                            WH/Store
+                        </div>
+                        <div>
+                            <strong>To:</strong>
+                            Gharbia Shop
+                        </div>
+                        <div>
+                            <strong>Date:</strong>
+                            <span t-field="doc.scheduled_date" t-options="{'widget': 'date'}"/>
+                        </div>
+                        <br></br>
+                        <br></br>
+                        <br></br>
+                        <table class="table table-sm o_main_table table-borderless">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <strong>Sr#</strong>
+                                    </th>
+                                    <th>
+                                        <strong>Barcode</strong>
+                                    </th>
+                                    <th>
+                                        <strong>Product</strong>
+                                    </th>
+                                    <th>
+                                        <strong>Ordered Quantity</strong>
+                                    </th>
+                                    <th>
+                                        <strong>Unit cost</strong>
+                                    </th>
+                                    <th>
+                                        <strong>Total cost</strong>
+                                    </th>
+                                    <th>
+                                        <strong>Delivered Quantity</strong>
+                                    </th>
+                                    <th>
+                                        <strong>Unit Sale Price</strong>
+                                    </th>
+                                    <th>
+                                        <strong>Total Sale</strong>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-set="counter" t-value="1"/>
+                                <t t-set="total_cost" t-value="0.0"/>
+                                <t t-set="total_sale" t-value="0.0"/>
+                                <t t-foreach="doc.move_ids" t-as="b">
+                                    <tr style="border-bottom: 1px solid black">
+                                        <td align="center">
+                                            <t t-esc="counter"/>
+                                        </td>
+                                        <t t-set="counter" t-value="counter + 1"/>
+                                        <td align="center">
+                                            <span t-field="b.product_id.barcode"/>
+                                        </td>
+                                        <td class="text-nowrap" align="left">
+                                            <span t-field="b.product_id.display_name"/>
+                                        </td>
+                                        <td align="center">
+                                            <span t-field="b.product_uom_qty"/>
+                                        </td>
+                                        <td align="center">
+                                            <span t-field="b.product_id.standard_price"/>
+                                        </td>
+                                        <td align="center">
+                                            <t t-set="total_cost"
+                                               t-value="total_cost + (b.product_id.standard_price * b.product_uom_qty)"/>
+                                            <span t-esc="b.product_id.standard_price * b.product_uom_qty"/>
+                                        </td>
+                                        <td align="center">
+                                            <span t-field="b.quantity"/>
+                                        </td>
+                                        <td align="center">
+                                            <span t-field="b.product_id.lst_price"/>
+                                        </td>
+                                        <td align="center">
+                                            <t t-set="total_sale"
+                                               t-value="total_sale + (b.product_uom_qty * b.product_id.lst_price)"/>
+                                            <span t-esc="b.product_uom_qty * b.product_id.lst_price"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                                <tr>
+                                    <td colspan="5" align="right">
+                                        <strong>Total Cost</strong>
+                                    </td>
+                                    <td colspan="2" align="left">
+                                        <strong>
+                                            <span t-esc="total_cost"/>
+                                        </strong>
+                                    </td>
+                                    <td class="text-nowrap">
+                                        <strong>Total Sale</strong>
+                                    </td>
+                                    <td align="center">
+                                        <strong>
+                                            <span t-esc="total_sale"/>
+                                        </strong>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <br></br>
+                        <br></br>
+                        <br></br>
+                        <div>
+                            <strong>
+                                ____________________________________________________________________________________________________________________________________________
+                            </strong>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-auto col-3 mw-100 mb-2">
+                                <span class="m-0 mr-10" align="center">
+                                    <strong>Checked By:</strong>
+                                </span>
+                            </div>
+                            <div class="col-auto col-3 mw-100 mb-2">
+                                <span class="m-0" align="center">
+                                    <strong>Authorized By:</strong>
+                                </span>
+                            </div>
+                            <div class="col-auto col-3 mw-100 mb-2">
+                                <span align="center">
+                                    <strong>Received By:</strong>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>
+

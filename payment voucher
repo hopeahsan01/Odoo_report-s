@@ -1,0 +1,272 @@
+<?xml version="1.0"?>
+<odoo>
+    <!-- Define the report action -->
+    <record id="print_grv_report" model="ir.actions.report">
+        <field name="name">Payment Voucher</field>
+        <field name="model">account.move</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">hospital.print_tax_invoice</field>
+        <field name="report_file">hospital.print_tax_invoice</field>
+        <field name="print_report_name">'%s' % (object.name)</field>
+        <field name="binding_model_id" ref="model_account_move"/>
+        <field name="binding_type">report</field>
+    </record>
+
+
+    <!-- Define the report template -->
+    <template id="print_tax_invoice">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h6 align="right">
+                            <strong>M.S.No:</strong>
+                        </h6>
+                        <table class="table table-sm table-bordered mt-4" style="border:1px solid black;">
+                            <thead>
+                                <tr>
+                                    <th colspan="13">
+                                        <h4>PAYMENT VOUCHER</h4>
+                                    </th>
+                                    <th colspan="5" align="left">P.V No
+                                        <br>Date</br>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th colspan="2">
+                                        <strong>A/C Head</strong>
+                                    </th>
+                                    <th colspan="3">
+                                        <strong>Net Amount</strong>
+                                    </th>
+                                    <th colspan="3">
+                                        <strong>VAT</strong>
+                                    </th>
+                                    <th colspan="3">
+                                        <strong>Gross Amount</strong>
+                                    </th>
+                                    <th>
+                                        <strong>Cheque/Job No</strong>
+                                    </th>
+                                    <th colspan="6">
+                                        <strong>Cheque Dated</strong>
+                                    </th>
+                                </tr>
+
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>2</td>
+                                    <td>3</td>
+                                    <td>4</td>
+                                    <td>5</td>
+                                    <td>6</td>
+                                    <td>7</td>
+                                    <td>8</td>
+                                    <td>9</td>
+                                    <td>10</td>
+                                    <td>11</td>
+                                    <td>12</td>
+                                    <td>13</td>
+                                    <td>14</td>
+                                    <td>15</td>
+                                    <td>16</td>
+                                    <td>17</td>
+                                    <td>18</td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        <strong align="right">Total
+                                            <br></br>
+                                        </strong>
+                                        <strong>Credit:</strong>
+                                    </td>
+                                    <td colspan="6"></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td colspan="7">
+                                        <strong>Paid To:</strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>1</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td align="left" colspan="7" rowspan="4">
+                                        <strong>For:</strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" align="right">
+                                        <b>Total</b>
+                                    </td>
+                                    <td colspan="6">1</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td colspan="7"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table class="table table-sm table-bordered">
+                            <thead>
+                                <tr>
+                                    <th style="font-weight:bold;" rowspan="4">
+                                        <b>G. R. N</b>
+                                    </th>
+                                    <th style="font-weight:bold;" rowspan="4">
+                                        <b>Acct. Sr. # Inv No</b>
+                                    </th>
+                                    <th style="font-weight:bold;" colspan="6">
+                                        <b>Invoice Value</b>
+                                    </th>
+                                    <th style="font-weight:bold;" rowspan="4">
+                                        <b>Payment Effected in Dhs.</b>
+                                    </th>
+                                    <th style="font-weight:bold;" rowspan="">
+                                        <b>Exchange Difference(If any)</b>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td colspan="5">
+                                        <strong>Foreign Currency</strong>
+                                    </td>
+                                    <td rowspan="2">
+                                        <strong>Dhs.</strong>
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td>
+                                        <strong>Currency</strong>
+                                    </td>
+                                    <td colspan="3">
+                                        <strong>Value</strong>
+                                    </td>
+                                    <td>
+                                        <strong>Rate</strong>
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+                                    <!--                                    <td></td>-->
+                                </tr>
+                                <tr>
+                                    <td>1</td>
+                                    <td>2</td>
+                                    <td>3</td>
+                                    <td>4</td>
+                                    <td>5</td>
+                                    <td>6</td>
+                                    <td>7</td>
+                                    <td>8</td>
+                                    <td>9</td>
+                                    <td>10</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="row mt-4 mb-2">
+                            <div class="col-auto col-3 mw-100 mb-2" align="center">
+                                <strong>_______________________</strong>
+                                <br/>
+                                <span class="m-0 mr-10">
+                                    <strong>Received By</strong>
+                                </span>
+                            </div>
+                            <div class="col-auto col-3 mw-100 mb-2" align="center">
+                                <strong>_______________________</strong>
+                                <br/>
+                                <span class="m-0">
+                                    <strong>Prepared By</strong>
+                                </span>
+                            </div>
+                            <div class="col-auto col-3 mw-100 mb-2" align="center">
+                                <strong>_______________________</strong>
+                                <br/>
+                                <span>
+                                    <strong>Checked By</strong>
+                                </span>
+                            </div>
+                            <div class="col-auto col-3 mw-100 mb-2" align="center">
+                                <strong>_______________________</strong>
+                                <br/>
+                                <span>
+                                    <strong>Authorized By</strong>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row mt-4 mb-2">
+                            <div class="col-auto col-3 mw-100 mb-2">
+                                <strong>Name:</strong>
+                            </div>
+                            <div class="col-auto col-3 mw-100 mb-2">
+                                <strong>Transaction No:</strong>
+                            </div>
+                        </div>
+                        <div>
+                            <strong>Signature:</strong>
+                        </div>
+                        <img src="/hospital/static/description/icon1.png"
+                             alt="Loading due to the speed lack in internet" height="50" width="50"/>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>
